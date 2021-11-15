@@ -84,7 +84,13 @@ struct U
             std::cout << "U's thing1 value: " << this->thing1 << std::endl;
             this->thing1 = *updatedValue;
             std::cout << "U's thing1 updated value: " << this->thing1 << std::endl;
-            this->thing2 += 0.01f;
+            while( std::abs(this->thing2 - this->thing1) > 0.001f )
+            {
+                /*
+                write something that makes the distance between that->thing2 and that->thing1 get smaller
+                */
+                this->thing2 += 0.01f;
+            }
             std::cout << "U's thing2 updated value: " << this->thing2 << std::endl;
             return this->thing2 * this->thing1;
         }
