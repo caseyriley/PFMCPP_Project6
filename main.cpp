@@ -86,9 +86,6 @@ struct U
             std::cout << "U's thing1 updated value: " << this->thing1 << std::endl;
             while( std::abs(this->thing2 - this->thing1) > 0.001f )
             {
-                /*
-                write something that makes the distance between that->thing2 and that->thing1 get smaller
-                */
                 this->thing2 += 0.01f;
             }
             std::cout << "U's thing2 updated value: " << this->thing2 << std::endl;
@@ -143,8 +140,15 @@ int main()
     T t2( 7, "b");                                             //6
     
     C f;                                            //7
-    auto* smaller = f.compare(&t1, &t2);                              //8
-    std::cout << "the smaller one is << " << smaller->name << std::endl; //9
+    auto* smaller = f.compare(&t1, &t2);  
+    if(smaller == nullptr)
+    {
+        std::cout << "smaller cannot be equal to a nullptr" << std::endl;
+    } 
+    else
+    {
+        std::cout << "the smaller one is << " << smaller->name << std::endl; //9
+    }                            //8
     
     U u1;
     float updatedValue = 5.f;
