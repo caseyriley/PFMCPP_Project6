@@ -94,7 +94,14 @@ int main()
     
     C f;                                            //7
     const auto& smaller = f.compare(t1, t2);  
-        std::cout << "the smaller one is << " << smaller->name << std::endl; //9
+    if(smaller == nullptr)
+    {
+        std::cout << "smaller cannot be equal to a nullptr";
+    }
+    else
+    {
+         std::cout << "the smaller one is << " << smaller->name << std::endl; //9
+    }
     
     U u1;
     float updatedValue = 5.f;
