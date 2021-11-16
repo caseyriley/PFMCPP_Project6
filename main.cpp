@@ -32,13 +32,10 @@ struct T
 
 struct C                                //4
 {
-    T* compare(T* a, T* b) //5
+    T* compare(T& a, T& b) //5
     {
-        if (a != nullptr && b != nullptr)
-        {
-            if( a->value < b->value ) return a;
-            if( a->value > b->value ) return b;
-        }
+        if( a.value < b.value ) return &a;
+        if( a.value > b.value ) return &b;
         return nullptr;
     }
 };
@@ -46,46 +43,33 @@ struct C                                //4
 struct U
 {
     float thing1 { 0 }, thing2 { 0 };
-    float updaterTimes(float* updatedValue)      //12
+    float updaterTimes(const float& updatedValue)      //12
     {
-        if (updatedValue != nullptr)
+        std::cout << "U's thing1 value: " << this->thing1 << std::endl;
+        this->thing1 = updatedValue;
+        std::cout << "U's thing1 updated value: " << this->thing1 << std::endl;
+        while( std::abs(this->thing2 - this->thing1) > 0.001f )
         {
-            std::cout << "U's thing1 value: " << this->thing1 << std::endl;
-            this->thing1 = *updatedValue;
-            std::cout << "U's thing1 updated value: " << this->thing1 << std::endl;
-            while( std::abs(this->thing2 - this->thing1) > 0.001f )
-            {
-                this->thing2 += 0.01f;
-            }
-            std::cout << "U's thing2 updated value: " << this->thing2 << std::endl;
-            return this->thing2 * this->thing1;
+            this->thing2 += 0.01f;
         }
-        std::cout << "nullptr, please fix" << std::endl;
-        return -1;
+        std::cout << "U's thing2 updated value: " << this->thing2 << std::endl;
+        return this->thing2 * this->thing1;
     }
 };
 
 struct Z
 {
-    static float updaterMultiply(U* that, float* updatedValue )        //10
+    static float updaterMultiply(U& that, const float& updatedValue )        //10
     {
-        if(that != nullptr && updatedValue != nullptr)
+        std::cout << "U's thing1 value: " << that.thing1 << std::endl;
+        that.thing1 = updatedValue;
+        std::cout << "U's thing1 updated value: " << that.thing1 << std::endl;
+        while( std::abs(that.thing2 - that.thing1) > 0.001f )
         {
-            std::cout << "U's thing1 value: " << that->thing1 << std::endl;
-            that->thing1 = *updatedValue;
-            std::cout << "U's thing1 updated value: " << that->thing1 << std::endl;
-            while( std::abs(that->thing2 - that->thing1) > 0.001f )
-            {
-                /*
-                write something that makes the distance between that->thing2 and that->thing1 get smaller
-                */
-                that->thing2 += 0.01f;
-            }
-            std::cout << "U's thing2 updated value: " << that->thing2 << std::endl;
-            return that->thing2 * that->thing1;
+            that.thing2 += 0.01f;
         }
-        std::cout << "nullptr, please fix" << std::endl;
-        return -1;
+        std::cout << "U's thing2 updated value: " << that.thing2 << std::endl;
+        return that.thing2 * that.thing1;
     }  
 };
         
@@ -109,20 +93,13 @@ int main()
     T t2( 7, "b");                                             //6
     
     C f;                                            //7
-    auto* smaller = f.compare(&t1, &t2);  
-    if(smaller == nullptr)
-    {
-        std::cout << "smaller cannot be equal to a nullptr" << std::endl;
-    } 
-    else
-    {
+    const auto& smaller = f.compare(t1, t2);  
         std::cout << "the smaller one is << " << smaller->name << std::endl; //9
-    }                            //8
     
     U u1;
     float updatedValue = 5.f;
-    std::cout << "[static func] u1's multiplied values: " << Z::updaterMultiply( &u1, &updatedValue) << std::endl;                  //11
+    std::cout << "[static func] u1's multiplied values: " << Z::updaterMultiply( u1, updatedValue) << std::endl;                  //11
     
     U u2;
-    std::cout << "[member func] u2's multiplied values: " << u2.updaterTimes( &updatedValue ) << std::endl;
+    std::cout << "[member func] u2's multiplied values: " << u2.updaterTimes( updatedValue ) << std::endl;
 }
