@@ -93,7 +93,7 @@ int main()
     T t2( 7, "b");                                             //6
     
     C f;                                            //7
-    const auto& smaller = f.compare(t1, t2);  
+    const auto* smaller = f.compare(t1, t2);  
     if(smaller == nullptr)
     {
         std::cout << "smaller cannot be equal to a nullptr";
